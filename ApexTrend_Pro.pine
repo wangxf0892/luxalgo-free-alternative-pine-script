@@ -1,25 +1,55 @@
-=====================================================
-ApexTrend Pro - Institutional Trend & Signals Suite
-=====================================================
+//@version=5
+indicator("ApexTrend - Open Source Signal Engine (Lux-Style)", overlay=true)
 
-Thank you for your purchase! 
-Follow these 3 simple steps to load your indicator in 30 seconds:
+// =========================================================================
+// ApexTrend Community Core Engine (Pine Script v5)
+// 100% Non-Repainting Trend & Volatility Signal Generator
+// 
+// 💎 Looking for the Full Institutional Pro Suite?
+// (Includes: Dynamic ATR TP1/TP2 Targets, Trailing SL & Cyberpunk HUD Dashboard)
+// 👉 Get the Pro Lifetime License on Whop: https://whop.com/nanbei-notion/apextrend-pro/
+// =========================================================================
 
-STEP 1: Open TradingView
-- Go to https://www.tradingview.com and open any chart (BTC, AAPL, etc.).
+// --- 1. Inputs ---
+atrLength    = input.int(10, "ATR Length", minval=1)
+atrMult      = input.float(1.8, "Volatility Sensitivity", minval=0.5, step=0.1)
+useEmaFilter = input.bool(true, "Enable 200 EMA Macro Trend Filter")
+emaLength    = input.int(200, "EMA Length", minval=10)
 
-STEP 2: Open Pine Editor
-- Click on "Pine Editor" at the bottom or the curly braces "{ }" on your screen.
-- Clear any default code inside the editor.
+// --- 2. Core Quantitative Logic ---
+atr = ta.atr(atrLength)
+upBand = hl2 - (atrMult * atr)
+dnBand = hl2 + (atrMult * atr)
 
-STEP 3: Paste & Save
-- Copy the entire Pine Script code below.
-- Paste it into the Pine Editor.
-- Click "Add to chart" and "Save".
+var float trendUp = na
+var float trendDn = na
+var int trendDir  = 1
 
-That's it! Your dynamic TP/SL levels, non-repainting buy/sell signals, 
-and institutional dashboard are now live on your chart.
+trendUp := close[1] > trendUp[1] ? math.max(upBand, trendUp[1]) : upBand
+trendDn := close[1] < trendDn[1] ? math.min(dnBand, trendDn[1]) : dnBand
 
-==================== [COPY THE CODE BELOW] ====================
+prevTrendDir = trendDir
+if trendDir == -1 and close > trendDn[1]
+    trendDir := 1
+else if trendDir == 1 and close < trendUp[1]
+    trendDir := -1
 
-[这里粘贴我们在第二步跑通的完整 ApexTrend Pro 代码]
+// Macro Filter
+emaFilter = ta.ema(close, emaLength)
+bullFilterPass = not useEmaFilter or (close > emaFilter)
+bearFilterPass = not useEmaFilter or (close < emaFilter)
+
+// Strictly Confirmed Signals on Bar Close (Zero Repainting)
+buyCond  = (trendDir == 1 and prevTrendDir == -1) and bullFilterPass
+sellCond = (trendDir == -1 and prevTrendDir == 1) and bearFilterPass
+
+buyConfirmed  = buyCond and barstate.isconfirmed
+sellConfirmed = sellCond and barstate.isconfirmed
+
+// --- 3. Plotting ---
+plotshape(buyConfirmed, title="BUY Signal", style=shape.triangleup, location=location.belowbar, color=color.new(#00F5D4, 0), size=size.small, text="BUY", textcolor=color.black)
+plotshape(sellConfirmed, title="SELL Signal", style=shape.triangledown, location=location.abovebar, color=color.new(#FF007F, 0), size=size.small, text="SELL", textcolor=color.white)
+
+plot(trendDir == 1 ? trendUp : na, "Trend Support", color=color.new(#00F5D4, 50), style=plot.style_linebr, linewidth=2)
+plot(trendDir == -1 ? trendDn : na, "Trend Resistance", color=color.new(#FF007F, 50), style=plot.style_linebr, linewidth=2)
+plot(useEmaFilter ? emaFilter : na, "200 EMA Trendline", color=color.orange, linewidth=1)
