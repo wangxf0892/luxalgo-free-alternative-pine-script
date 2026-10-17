@@ -12,7 +12,8 @@ Stop paying **$67/month ($800+/year)** for overhyped commercial indicators.
 
 ## 📊 Chart Preview (Tested on AAPL & BTC)
 
-> *(在这里直接把之前从 TradingView 下载的深色 4K AAPL 截图直接拖拽（Drag & Drop）进输入框，GitHub 会自动生成图片外链)*
+<img width="1835" height="925" alt="ApexTrend Pro" src="https://github.com/user-attachments/assets/7e36f4ed-afe4-4411-93a7-3cf59d0eed9e" />
+
 
 ---
 
