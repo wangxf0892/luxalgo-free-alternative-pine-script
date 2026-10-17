@@ -1,0 +1,25 @@
+=====================================================
+ApexTrend Pro - Institutional Trend & Signals Suite
+=====================================================
+
+Thank you for your purchase! 
+Follow these 3 simple steps to load your indicator in 30 seconds:
+
+STEP 1: Open TradingView
+- Go to https://www.tradingview.com and open any chart (BTC, AAPL, etc.).
+
+STEP 2: Open Pine Editor
+- Click on "Pine Editor" at the bottom or the curly braces "{ }" on your screen.
+- Clear any default code inside the editor.
+
+STEP 3: Paste & Save
+- Copy the entire Pine Script code below.
+- Paste it into the Pine Editor.
+- Click "Add to chart" and "Save".
+
+That's it! Your dynamic TP/SL levels, non-repainting buy/sell signals, 
+and institutional dashboard are now live on your chart.
+
+==================== [COPY THE CODE BELOW] ====================
+
+[这里粘贴我们在第二步跑通的完整 ApexTrend Pro 代码]
